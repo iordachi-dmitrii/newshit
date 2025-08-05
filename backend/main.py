@@ -494,31 +494,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
 # Mount static files
+
+# Serve static files and index.html from /static at root
+from fastapi.staticfiles import StaticFiles
+import os
+from pathlib import Path
+
 static_dir = Path("static")
 if static_dir.exists():
-    app.mount("/static", StaticFiles(directory="static"), name="static")
-    
-    # Serve index.html for SPA routing
-    @app.get("/", response_class=HTMLResponse)
-    async def serve_frontend():
-        """Serve the frontend application"""
-        index_file = static_dir / "index.html"
-        if index_file.exists():
-            return HTMLResponse(content=index_file.read_text(), status_code=200)
-        return HTMLResponse(content="<h1>VideoVault API is running!</h1><p>Upload your frontend to /static directory</p>", status_code=200)
-    
-    # Catch-all route for SPA
-    @app.get("/{path:path}", response_class=HTMLResponse)
-    async def serve_spa(path: str):
-        """Serve SPA for client-side routing"""
-        # Don't serve SPA for API routes
-        if path.startswith("api/"):
-            raise HTTPException(status_code=404, detail="API endpoint not found")
-        
-        index_file = static_dir / "index.html"
-        if index_file.exists():
-            return HTMLResponse(content=index_file.read_text(), status_code=200)
-        raise HTTPException(status_code=404, detail="Frontend not found")
+    app.mount("/", StaticFiles(directory="static", html=True), name="static-root")
 
 if __name__ == "__main__":
     import uvicorn
