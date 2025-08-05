@@ -472,30 +472,41 @@ async def get_supported_platforms():
     return {"platforms": supported}
 
 # Cleanup task to remove expired downloads
+import subprocess
+import sys
+
 @app.on_event("startup")
-async def cleanup_expired_downloads():
-    """Periodic cleanup of expired downloads"""
-    
+async def startup_tasks():
+    """Startup: автообновление yt-dlp и запуск очистки"""
+    # --- Обновление yt-dlp через pip ---
+    try:
+        print("[INFO] Обновление yt-dlp через pip...")
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "install", "--upgrade", "yt-dlp"],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        print("[INFO] yt-dlp обновлён:\n", result.stdout)
+    except subprocess.CalledProcessError as e:
+        print("[WARN] Не удалось обновить yt-dlp через pip:\n", e.stderr)
+
+    # --- Очистка устаревших загрузок ---
     async def cleanup_task():
         while True:
             try:
-                # Clean up local files older than CLEANUP_AFTER_HOURS
                 cutoff_time = datetime.now() - timedelta(hours=CLEANUP_AFTER_HOURS)
-                
                 for job_dir in DOWNLOAD_DIR.iterdir():
                     if job_dir.is_dir():
-                        # Check if directory is old enough
                         created_time = datetime.fromtimestamp(job_dir.stat().st_ctime)
                         if created_time < cutoff_time:
                             shutil.rmtree(job_dir)
-                            print(f"Cleaned up expired download: {job_dir}")
-                
-                await asyncio.sleep(3600)  # Run every hour
-                
-            except Exception as e:
-                print(f"Cleanup task error: {e}")
+                            print(f"[CLEANUP] Removed expired download: {job_dir}")
                 await asyncio.sleep(3600)
-    
+            except Exception as e:
+                print(f"[ERROR] Cleanup task failed: {e}")
+                await asyncio.sleep(3600)
+
     asyncio.create_task(cleanup_task())
 
 # Health check endpoint for monitoring
