@@ -189,11 +189,6 @@ class ProgressHook:
                     
             except Exception as e:
                 print(f"Progress hook error: {e}")
-
-@app.get("/")
-async def root():
-    return {"message": "VideoVault API", "version": "1.0.0", "status": "active"}
-
 @app.get("/health")
 async def health_check():
     return {
