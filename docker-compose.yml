@@ -1,0 +1,66 @@
+# VideoVault - Development Environment
+version: '3.8'
+
+services:
+  # Backend API
+  api:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - AWS_BUCKET_NAME=videovault-downloads
+      - MAX_FILE_SIZE=524288000  # 500MB
+      - CLEANUP_AFTER_HOURS=24
+    volumes:
+      - ./backend:/app
+      - downloads_data:/app/downloads
+    depends_on:
+      - redis
+    restart: unless-stopped
+    
+  # Redis for job tracking
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    
+  # Frontend (development)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    command: bun dev --host 0.0.0.0
+    
+  # Optional: MinIO for S3-compatible storage (development)
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin123
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+volumes:
+  downloads_data:
+  redis_data:
+  minio_data:
