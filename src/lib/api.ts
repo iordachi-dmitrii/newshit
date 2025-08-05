@@ -1,7 +1,6 @@
 // VideoVault API Client - Real Backend Integration
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 // Types matching backend models
 export interface VideoInfo {
   id: string;
