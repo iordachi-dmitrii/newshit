@@ -251,21 +251,29 @@ async def start_download(request: DownloadRequest, background_tasks: BackgroundT
     """Start video download process"""
     
     job_id = str(uuid.uuid4())
-    
-    # Create initial job status
+
+    # Create initial job status with all required fields (None for those not yet known)
     status = DownloadStatus(
         id=job_id,
         status="queued",
         progress=0.0,
+        title=None,
+        file_size=None,
+        download_url=None,
+        error_message=None,
         created_at=datetime.now(),
+        completed_at=None,
         expires_at=datetime.now() + timedelta(hours=CLEANUP_AFTER_HOURS)
     )
-    
+
+    # Логируем начальный статус для отладки
+    print(f"[DEBUG] Initial DownloadStatus: {status.dict()}")
+
     store_job_status(job_id, status)
-    
+
     # Add download task to background
     background_tasks.add_task(process_download, job_id, str(request.url), request.format, request.quality)
-    
+
     return {"job_id": job_id, "status": status.dict()}
 
 async def process_download(job_id: str, url: str, format_type: str, quality: str):
