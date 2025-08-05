@@ -15,6 +15,7 @@ import tempfile
 import shutil
 from pathlib import Path
 from datetime import datetime, timedelta
+import threading
 import redis
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -38,12 +39,22 @@ AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME", "videovault-downloads")
 MAX_FILE_SIZE = 500 * 1024 * 1024  # 500MB limit
 CLEANUP_AFTER_HOURS = 24
 
-# Initialize Redis for job tracking
+# In-memory fallback storage
+_inmemory_jobs = {}
+_inmemory_lock = threading.Lock()
+
+# Try to connect to Redis, fallback to in-memory if not available
 try:
-    redis_client = redis.from_url(REDIS_URL)
-except:
+    redis_client = redis.StrictRedis.from_url(REDIS_URL, decode_responses=True)
+    redis_client.ping()
+    _use_redis = True
+    print("[INFO] Connected to Redis")
+except Exception as e:
     redis_client = None
-    print("Warning: Redis not available, using in-memory storage")
+    _use_redis = False
+    print(f"[WARN] Redis unavailable, using in-memory job storage: {e}")
+
+# Initialize Redis for job tracking
 
 # Initialize S3 client
 try:
@@ -134,15 +145,17 @@ def store_job_status(job_id: str, status: DownloadStatus):
     if status.expires_at:
         status_dict['expires_at'] = status.expires_at.isoformat()
     
-    if redis_client:
+    if _use_redis:
         redis_client.setex(f"job:{job_id}", 86400, json.dumps(status_dict))  # 24 hour expiry
     else:
         download_jobs[job_id] = status_dict
+        with _inmemory_lock:
+            _inmemory_jobs[job_id] = status_dict
 
 def get_job_status(job_id: str) -> Optional[DownloadStatus]:
     """Retrieve job status from Redis or in-memory fallback"""
     try:
-        if redis_client:
+        if _use_redis:
             data = redis_client.get(f"job:{job_id}")
             if data:
                 status_dict = json.loads(data)
