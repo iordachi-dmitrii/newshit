@@ -1,0 +1,422 @@
+/* =========================================================================
+   Hell Grind: разоблачение — landing
+   Mobile-first. База = телефон; десктоп навешивается через min-width.
+   Эстетика зафиксирована в SPEC §1–2: почти-чёрный + ОДИН кислотный акцент.
+   ========================================================================= */
+
+:root {
+  /* COLOR — почти-чёрный + один кислотный акцент */
+  --bg:            #0A0A0B;
+  --bg-elev:       #121214;
+  --ink:           #EDEDE8;
+  --ink-dim:       #6B6B6E;
+  --accent:        #D6FB3D;   /* ТОЛЬКО: ключевая цифра, «РЕЖИССУРУ», CTA */
+  --accent-ink:    #0A0A0B;
+  --strike:        #FF3B2F;
+
+  /* TYPE */
+  --font-display:  "Anton", "Oswald", sans-serif;
+  --font-mono:     "JetBrains Mono", ui-monospace, monospace;
+
+  --fs-hero:       clamp(3.5rem, 14vw, 13rem);
+  --fs-section:    clamp(2.2rem, 7vw, 6rem);
+  --fs-body:       clamp(1rem, 1.4vw, 1.25rem);
+  --fs-mono:       0.8rem;
+  --tracking-mono: 0.18em;
+
+  /* SPACE */
+  --edge:          clamp(1.25rem, 4vw, 4rem);
+  --section-gap:   clamp(6rem, 16vh, 14rem);
+  --maxw:          1400px;
+
+  /* hairlines (не акцент — служебные линии) */
+  --line:          rgba(237, 237, 232, 0.14);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+ul, ol { list-style: none; padding: 0; }
+a { color: inherit; }
+
+/* атмосфера, не текстура: едва заметный grain поверх всего */
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* ----- общие утилиты ----- */
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+}
+
+.section {
+  padding: var(--section-gap) var(--edge);
+  max-width: var(--maxw);
+  margin-inline: auto;
+}
+
+.section-label {
+  color: var(--ink-dim);
+  margin-bottom: clamp(2rem, 6vh, 4rem);
+}
+
+.accent { color: var(--accent); }
+
+/* ----- кнопки ----- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono);
+  text-decoration: none;
+  padding: 1.1rem 1.8rem;
+  border: 1px solid;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, filter 0.2s ease;
+  will-change: transform;
+}
+.btn--ghost {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: transparent;
+}
+.btn--ghost:hover { background: var(--ink); color: var(--bg); }
+
+.btn--accent {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  font-size: clamp(1.4rem, 6vw, 2rem);
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+  padding: 1rem 2.4rem;
+}
+.btn--accent:hover { filter: brightness(1.06); }
+
+/* =========================================================================
+   S1 — HERO (mobile base: кадр сверху, заголовок под ним, одна колонка)
+   ========================================================================= */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 5vh, 3rem);
+  padding: var(--edge);
+  overflow: hidden;
+}
+
+.edge-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.hero__top .tag { color: var(--ink); }
+.hero__top .subline { color: var(--ink-dim); }
+
+.hero__stage {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.75rem, 5vh, 3rem);
+}
+
+/* кадр-улика */
+.frame {
+  order: -1;                 /* mobile: кадр над заголовком */
+  position: relative;
+  z-index: 2;
+  width: min(86vw, 440px);
+  aspect-ratio: 16 / 9;      /* резерв места => без CLS */
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  overflow: visible;
+  transform: none;
+}
+.frame__still {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 90% at 32% 18%, #20232a 0%, #0d0e12 52%, #050506 100%),
+    linear-gradient(118deg, #16181e, #0a0a0b);
+}
+.frame__seam {
+  position: absolute;
+  top: -6%;
+  bottom: -6%;
+  left: 57%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(237,237,232,0.5), transparent);
+  filter: blur(0.4px);
+  opacity: 0.5;
+}
+.frame__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 120% at 50% 45%, transparent 55%, rgba(0,0,0,0.55) 100%);
+}
+.frame__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* маркетинговая ложь + красный страйк */
+.frame__caption {
+  position: absolute;
+  left: 50%;
+  bottom: -0.6em;
+  transform: translateX(-50%) rotate(-2deg);
+  z-index: 3;
+  white-space: nowrap;
+}
+.lie {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 7vw, 2.6rem);
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-shadow: 0 4px 18px rgba(0,0,0,0.8);
+}
+.lie-target { position: relative; display: inline-block; }
+.strike {
+  position: absolute;
+  left: -4%;
+  top: 50%;
+  width: 108%;
+  height: 0.7em;
+  transform: translateY(-50%);
+  overflow: visible;
+}
+.strike__path {
+  fill: none;
+  stroke: var(--strike);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;          /* база: виден (no-JS / reduced-motion) */
+}
+
+/* заголовок «ТЕБЕ СОВРАЛИ» */
+.hero__headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 0.82;
+  text-align: center;
+}
+.word { display: block; overflow: hidden; }       /* маска для reveal */
+.word__i {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+}
+
+.hero__bottom .btn--ghost { flex: 1; min-width: 12rem; }
+.hero__bottom .scroll-cue { color: var(--ink-dim); }
+
+/* =========================================================================
+   S2 — РАЗОБЛАЧЕНИЕ
+   ========================================================================= */
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 9vh, 6rem);
+}
+.fact { display: flex; flex-direction: column; gap: 0.75rem; }
+.fact__num {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: clamp(3.5rem, 17vw, 9rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.fact--key .fact__num { color: var(--accent); }   /* ← акцент #1 */
+.fact__desc {
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: 0;
+  max-width: 44ch;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+/* =========================================================================
+   S3 — ПОВОРОТ
+   ========================================================================= */
+.turn { text-align: center; }
+.turn__line {
+  font-family: var(--font-display);
+  font-size: var(--fs-section);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+.turn__line .line { display: block; overflow: hidden; }
+.turn__line .line__i { display: block; }
+.turn__body {
+  color: var(--ink-dim);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 52ch;
+  margin: clamp(2.5rem, 7vh, 4.5rem) auto 0;
+}
+
+/* =========================================================================
+   S4 — ЧТО ЗАБЕРЁШЬ
+   ========================================================================= */
+.grid2 { display: grid; grid-template-columns: 1fr; }
+.card {
+  border-top: 1px solid var(--line);
+  padding: clamp(1.75rem, 5vw, 2.75rem) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.card__no { color: var(--ink-dim); }
+.card__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 9vw, 3rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+}
+.card__desc {
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  max-width: 42ch;
+}
+
+/* =========================================================================
+   S5 — ФОРМАТ + ЦЕНА (CTA)
+   ========================================================================= */
+.join {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(1.5rem, 5vh, 2.5rem);
+}
+.join__facts { color: var(--ink-dim); max-width: 40ch; line-height: 2; }
+.price { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.price__num {
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 26vw, 10rem);
+  line-height: 0.78;
+  letter-spacing: 0.01em;
+}
+.price__note { color: var(--ink-dim); }
+.join__date { color: var(--ink); }
+.join .btn--accent { width: 100%; max-width: 26rem; }   /* ← акцент #3 */
+.join__limit { color: var(--ink-dim); max-width: 34ch; text-transform: none; letter-spacing: 0; }
+
+/* =========================================================================
+   S6 — FOOTER
+   ========================================================================= */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: clamp(2.5rem, 7vh, 4rem) var(--edge) clamp(2rem, 5vh, 3rem);
+  color: var(--ink-dim);
+  border-top: 1px solid var(--line);
+  font-size: 0.7rem;
+}
+.footer__link { text-decoration: none; }
+.footer__link:hover { color: var(--ink); }
+
+/* =========================================================================
+   DESKTOP — наложение/композиция поверх mobile-first базы
+   ========================================================================= */
+@media (min-width: 769px) {
+  .hero__stage {
+    display: grid;
+    place-items: center;          /* кадр в сакральном центре */
+  }
+  .hero__headline {
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    z-index: 1;                   /* заголовок ПОЗАДИ кадра */
+    pointer-events: none;
+    text-align: left;
+  }
+  .word:nth-child(1) { align-self: flex-start; }
+  .word:nth-child(2) { align-self: flex-end; }
+  .word:nth-child(1) .word__i { margin-left: -2.5vw; }   /* режется левым краем */
+  .word:nth-child(2) .word__i { margin-right: -2.5vw; }  /* режется правым краем */
+
+  .frame {
+    order: 0;
+    width: min(42vw, 540px);
+    transform: rotate(-3deg);     /* слегка наклонён */
+  }
+  .lie { font-size: clamp(2rem, 3vw, 2.8rem); }
+
+  .hero__bottom .btn--ghost { flex: 0 0 auto; }
+
+  /* S4 — 2×2 с разделителями-линиями */
+  .grid2 { grid-template-columns: 1fr 1fr; }
+  .card { padding: clamp(2.5rem, 4vw, 3.5rem) clamp(2rem, 3vw, 3rem); }
+  .card:nth-child(-n + 2) { border-top: 1px solid var(--line); }
+  .card:nth-child(2n) { border-left: 1px solid var(--line); }
+}
+
+@media (min-width: 1100px) {
+  .facts { padding-right: 30%; }   /* цифры к левому краю, воздух справа */
+}
+
+/* =========================================================================
+   prefers-reduced-motion — реально гасит движение, финальные состояния видны
+   (вся ключевая анимация в JS тоже под этим гардом)
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
