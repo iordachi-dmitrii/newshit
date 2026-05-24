@@ -81,17 +81,32 @@
     });
   });
 
-  /* ------------------- S3 — построчный mask-reveal --------------------- */
-  gsap.set(".turn__line .line__i", { yPercent: 110 });
-  ScrollTrigger.create({
-    trigger: ".turn__line",
-    start: "top 78%",
-    once: true,
-    onEnter: function () {
-      gsap.to(".turn__line .line__i", {
-        yPercent: 0, duration: 0.7, stagger: 0.12, ease: "power3.out"
-      });
-    }
+  /* --------- построчный mask-reveal для всех headline-секций ---------- */
+  document.querySelectorAll(".turn__line, .section-head").forEach(function (h) {
+    var lines = h.querySelectorAll(".line__i");
+    if (!lines.length) return;
+    gsap.set(lines, { yPercent: 110 });
+    ScrollTrigger.create({
+      trigger: h,
+      start: "top 80%",
+      once: true,
+      onEnter: function () {
+        gsap.to(lines, { yPercent: 0, duration: 0.7, stagger: 0.12, ease: "power3.out" });
+      }
+    });
+  });
+
+  /* ----------------- абзацы-доказательства: fade-up ------------------- */
+  gsap.utils.toArray(".stack__body, .turn__body").forEach(function (el) {
+    gsap.set(el, { autoAlpha: 0, y: 20 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 88%",
+      once: true,
+      onEnter: function () {
+        gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" });
+      }
+    });
   });
 
   /* ----------------------- S4 — fade + lift карточек ------------------- */

@@ -302,6 +302,32 @@ a { color: inherit; }
   margin: clamp(2.5rem, 7vh, 4.5rem) auto 0;
 }
 
+/* Section headlines (S2 / S5 / S6) — общий condensed-заголовок c masked-reveal */
+.section-head {
+  font-family: var(--font-display);
+  font-size: var(--fs-section);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  margin-bottom: clamp(2rem, 6vh, 4rem);
+}
+.section-head .line { display: block; overflow: hidden; }
+.section-head .line__i { display: block; }
+.section-head--center { text-align: center; }
+.join .section-head { margin-bottom: 0; }
+
+/* S3 — ИХ ЖЕ СТЕК (мост-доказательство): улика читается как документация */
+.stack__head { text-align: left; }
+.stack__body {
+  color: var(--ink-dim);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 62ch;
+  margin-top: clamp(2rem, 6vh, 4rem);
+}
+.stack__body b { color: var(--ink); font-weight: 500; }
+
 /* =========================================================================
    S4 — ЧТО ЗАБЕРЁШЬ
    ========================================================================= */
