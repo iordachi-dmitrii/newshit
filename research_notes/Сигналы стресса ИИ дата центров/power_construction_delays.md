@@ -99,8 +99,8 @@
   - `project_jupiter_stargate_sites.md`: площадки Stargate, включая Project Jupiter (уведомление Oracle о force majeure от 24.09.2026, перенос газопровода на 01.02.2027, затянувшийся air permit) и непроверенное сообщение о моратории в Lordstown.
 - Непроверенные наводки из фоновых знаний исследователя (обучающие данные; в этой сессии НЕ проверялись; URL нет; НЕ ЦИТИРОВАТЬ БЕЗ ПРОВЕРКИ; это прецеденты сентября 2025 – начала 2026 г., не текущие данные):
   - Santa Clara, CA: два готовых ЦОД (Digital Realty SJC37 и Stack Infrastructure SVY02A, порядка 48 MW каждый) простаивали в ожидании мощности от Silicon Valley Power — Bloomberg, ноябрь 2025 г.
-  - CoreWeave: на отчёте за III кв. 2025 г. (10.11.2025) снизила прогноз года из-за задержек у стороннего девелопера ЦОД; пресса связывала это с площадкой Core Scientific в Denton, Texas.
-  - Fermi America (Project Matador, Amarillo, Texas): 12.12.2025 раскрыла, что первый потенциальный арендатор расторг соглашение об авансе на строительство на $150 млн.
+  - CoreWeave: на отчёте за III кв. 2025 г. (10.11.2025) снизила прогноз года из-за задержек у стороннего девелопера ЦОД; пресса связывала это с площадкой Core Scientific в Denton, Texas. (Этот пункт подтверждается источниками в `developers_neoclouds_tenants.md`, раздел 1.)
+  - Fermi America (Project Matador, Amarillo, Texas): 12.12.2025 раскрыла, что первый потенциальный арендатор расторг соглашение об авансе на строительство на $150 млн. (Этот пункт подтверждается источниками в `developers_neoclouds_tenants.md`, раздел 2.)
   - Tucson, Arizona, «Project Blue» (Beale Infrastructure; конечный пользователь по сообщениям прессы — AWS): городской совет 06.08.2025 единогласно отказался от проекта.
   - Chandler, Arizona: городской совет в декабре 2025 г. единогласно отклонил проект ЦОД.
   - Microsoft: отказ от площадки в Caledonia, Wisconsin после протестов (октябрь 2025 г.). Google: отзыв заявки на резонирование в Franklin Township, Indianapolis (сентябрь 2025 г.).
@@ -239,8 +239,8 @@
   - `developers_neoclouds_tenants.md`: delay credits у IREN по Childress после окончания льготных периодов; расторжение договора Microsoft с Nscale (Loughton, Великобритания) из-за отсутствия сетевой мощности; коллективный иск к CoreWeave из-за задержек строительства (дело № 26-cv-00355); механизм capex credits у Core Scientific.
   - `debt_market_signals.md`: Reuters 10.08.2026 — кредиторы пристальнее изучают финансирование ЦОД из-за роста местной оппозиции; реакция рынка 05.11.2026 на итоги выборов.
 - Непроверенные наводки из фоновых знаний исследователя (в этой сессии НЕ проверялись; URL нет; НЕ ЦИТИРОВАТЬ БЕЗ ПРОВЕРКИ; прецеденты 2025 г.):
-  - CoreWeave (10.11.2025): снижение годового прогноза из-за задержки у стороннего девелопера ЦОД.
-  - Fermi America (12.12.2025): расторжение арендатором соглашения об авансе на строительство на $150 млн.
+  - CoreWeave (10.11.2025): снижение годового прогноза из-за задержки у стороннего девелопера ЦОД (подтверждается источниками в `developers_neoclouds_tenants.md`).
+  - Fermi America (12.12.2025): расторжение арендатором соглашения об авансе на строительство на $150 млн (подтверждается источниками в `developers_neoclouds_tenants.md`).
   - Microsoft (февраль–март 2025 г.): заметки TD Cowen об отказе от части договоров аренды ЦОД.
   - Oracle и OpenAI (декабрь 2025 г.): сообщение Bloomberg о сдвиге части площадок с 2027 на 2028 г., Oracle отрицала (зона исследователя по Stargate).
 - Запросы для добора: «data center force majeure notice power delay 2026»; «liquidated damages data center lease late delivery 2026 lawsuit»; «lease termination data center delay tenant walks 2026»; «CoreWeave Core Scientific delay penalties 2026»; «hyperscaler lease cancellation 2026 TD Cowen»; «contractor lawsuit data center delay utility energization 2026»; «Synergy Research hyperscale capacity additions Q3 2026 record»; «Microsoft Amazon Alphabet Q3 2026 earnings capacity constrained power shells».
